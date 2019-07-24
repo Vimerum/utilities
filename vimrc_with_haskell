@@ -1,0 +1,60 @@
+" ----- VIM SETTINGS -----
+syntax enable
+ 
+set showmatch		
+set number		
+set autoindent		
+set smartindent
+set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+set nocompatible
+filetype off
+
+" Opens a cpp file with a template, if it exists
+if filereadable(expand("~/.base.cpp"))
+    au BufNewFile ~/*.cpp 0r ~/.base.cpp
+endif
+" Adds .local to PATH
+let $PATH = $PATH . ':' . expand('~/.local/bin')
+
+" ----- VUNDLE PLUGINS -----
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'w0rp/ale'
+Plugin 'vim-airline/vim-airline'
+Plugin 'eagletmt/ghcmod-vim'
+Plugin 'Shougo/vimproc'
+Plugin 'tpope/vim-fugitive'
+Plugin 'scrooloose/nerdtree'
+
+call vundle#end()
+filetype plugin indent on
+
+" ----- ALE SETTINGS -----
+" Enable vim-airline
+let g:airline#extensions#ale#enabled = 1
+" Disable location list
+let g:ale_set_loclist = 0
+" Disable quick fix
+let g:ale_set_quickfix = 0
+" Enable highlights for errors
+let g:ale_set_highlights = 1
+" Shows preview window with error when line with error is selected
+let g:ale_cursor_detail = 1
+" Run lint on save buffer
+let g:ale_lint_on_save = 1
+" Run lint on enter buffer
+let g:ale_lint_on_enter = 1
+" Run lint when exiting insert mode
+let g:ale_lint_on_insert_leave = 1
+" Run lint when text changes
+let g:ale_lint_on_text_changed = 'always'
+
+" ----- NERDTREE SETTINGS -----
+" Opens NERDTree with Ctrl+N
+map <C-n> :NERDTreeToggle<CR>
+" Opens NERDTree when opening a directory
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
